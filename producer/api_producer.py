@@ -9,10 +9,27 @@ producer = KafkaProducer(
 )
 
 API_URL = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+POLL_INTERVAL = 20  # seconds between requests (6 calls/min, safe for free tier)
 
 while True:
     try:
-        data = requests.get(API_URL, timeout=10).json()
+        response = requests.get(API_URL, timeout=10)
+        
+        # Handle rate limiting
+        if response.status_code == 429:
+            retry_after = int(response.headers.get("Retry-After", 60))
+            print(f"Rate limited. Waiting {retry_after}s...")
+            time.sleep(retry_after)
+            continue
+            
+        response.raise_for_status()
+        data = response.json()
+        
+        # Check if response has expected structure
+        if "bitcoin" not in data:
+            print(f"Unexpected response: {data}")
+            time.sleep(POLL_INTERVAL)
+            continue
 
         event = {
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -21,7 +38,10 @@ while True:
 
         producer.send("prices", event)
         print("sent:", event)
-    except Exception as e:
-        print(f"Error: {e}")
+        
+    except requests.exceptions.RequestException as e:
+        print(f"Request error: {e}")
+    except (KeyError, ValueError) as e:
+        print(f"Parse error: {e}")
 
-    time.sleep(5)
+    time.sleep(POLL_INTERVAL)

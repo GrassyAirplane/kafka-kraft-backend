@@ -40,3 +40,20 @@ services:
         echo 'Topics created successfully!'
         kafka-topics --bootstrap-server kafka:9092 --list
       "
+
+  spark:
+    build: ./spark
+    container_name: spark
+    user: root
+    ports:
+      - "8080:8080"   # Spark UI
+      - "7077:7077"   # Spark master
+      - "4040:4040"   # Spark job UI
+    volumes:
+      - ./spark:/opt/spark-apps
+      - ./warehouse:/opt/warehouse
+    depends_on:
+      kafka:
+        condition: service_healthy
+    command: >
+      bash -c "tail -f /dev/null"

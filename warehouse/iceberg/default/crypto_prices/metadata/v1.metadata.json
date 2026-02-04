@@ -1,0 +1,46 @@
+{
+  "format-version" : 2,
+  "table-uuid" : "e904020e-13f5-48e6-95a0-791799da41fe",
+  "location" : "/opt/warehouse/iceberg/default/crypto_prices",
+  "last-sequence-number" : 0,
+  "last-updated-ms" : 1770207502156,
+  "last-column-id" : 2,
+  "current-schema-id" : 0,
+  "schemas" : [ {
+    "type" : "struct",
+    "schema-id" : 0,
+    "fields" : [ {
+      "id" : 1,
+      "name" : "timestamp",
+      "required" : false,
+      "type" : "string"
+    }, {
+      "id" : 2,
+      "name" : "usd_price",
+      "required" : false,
+      "type" : "double"
+    } ]
+  } ],
+  "default-spec-id" : 0,
+  "partition-specs" : [ {
+    "spec-id" : 0,
+    "fields" : [ ]
+  } ],
+  "last-partition-id" : 999,
+  "default-sort-order-id" : 0,
+  "sort-orders" : [ {
+    "order-id" : 0,
+    "fields" : [ ]
+  } ],
+  "properties" : {
+    "owner" : "root",
+    "write.parquet.compression-codec" : "zstd"
+  },
+  "current-snapshot-id" : -1,
+  "refs" : { },
+  "snapshots" : [ ],
+  "statistics" : [ ],
+  "partition-statistics" : [ ],
+  "snapshot-log" : [ ],
+  "metadata-log" : [ ]
+}

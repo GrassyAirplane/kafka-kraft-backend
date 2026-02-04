@@ -1,0 +1,163 @@
+import { Client } from "ssh2";
+import net from "net";
+import mongoose from "mongoose";
+
+/**
+ * Creates a two-hop SSH tunnel for production database access
+ * Path: localhost:9999 -> jump host -> db server -> MongoDB:27017
+ */
+const createMultiHopTunnel = () => {
+  return new Promise((resolve, reject) => {
+    const jumpHost = new Client();
+    const dbServer = new Client();
+
+    // Jump host configuration (first hop)
+    const jumpHostConfig = {
+      host: "sterlinggroup.ddns.net",
+      port: 6699,
+      username: "euan",
+      password: process.env.SSH_PASSWORD,
+      // Accept unknown host keys (like 'yes' to fingerprint prompt)
+      hostVerifier: () => true,
+    };
+
+    // Database server configuration (second hop)
+    const dbServerConfig = {
+      host: "192.168.1.80",
+      port: 22,
+      username: "euan",
+      password: process.env.SSH_PASSWORD, // Same password for both hops
+      // Accept unknown host keys
+      hostVerifier: () => true,
+    };
+
+    console.log("Connecting to jump host...");
+
+    jumpHost.on("ready", () => {
+      console.log("Jump host connected, creating tunnel to DB server...");
+
+      // Create a forwarded connection through the jump host to the DB server
+      jumpHost.forwardOut(
+        "127.0.0.1",
+        0,
+        dbServerConfig.host,
+        dbServerConfig.port,
+        (err, stream) => {
+          if (err) {
+            jumpHost.end();
+            return reject(new Error(`Jump host forward failed: ${err.message}`));
+          }
+
+          // Connect to the DB server through the forwarded stream
+          dbServer.connect({
+            ...dbServerConfig,
+            sock: stream, // Use the forwarded stream as the socket
+          });
+        }
+      );
+    });
+
+    dbServer.on("ready", () => {
+      console.log("DB server connected, setting up MongoDB tunnel...");
+
+      // Create a local server that forwards to MongoDB
+      const localServer = net.createServer((socket) => {
+        dbServer.forwardOut(
+          "127.0.0.1",
+          0,
+          "127.0.0.1", // MongoDB is on localhost of the DB server
+          27017,
+          (err, stream) => {
+            if (err) {
+              socket.end();
+              return;
+            }
+            socket.pipe(stream).pipe(socket);
+          }
+        );
+      });
+
+      localServer.listen(9999, "127.0.0.1", () => {
+        console.log("SSH tunnel established on localhost:9999");
+        resolve({ localServer, jumpHost, dbServer });
+      });
+
+      localServer.on("error", (err) => {
+        reject(new Error(`Local server error: ${err.message}`));
+      });
+    });
+
+    jumpHost.on("error", (err) => {
+      reject(new Error(`Jump host connection error: ${err.message}`));
+    });
+
+    dbServer.on("error", (err) => {
+      jumpHost.end();
+      reject(new Error(`DB server connection error: ${err.message}`));
+    });
+
+    // Connect to the jump host
+    jumpHost.connect(jumpHostConfig);
+  });
+};
+
+export const connectMongoDB = async () => {
+  if (process.env.ENVIRONMENT === "DEV") {
+    try {
+      await mongoose.connect(process.env.MONGODB_URI, {
+        authSource: "admin",
+        user: process.env.MONGODB_USER_NAME,
+        pass: process.env.MONGODB_USER_PASSWORD,
+      });
+
+      console.log("MongoDB Connected");
+    } catch (err) {
+      console.log("MongoDB Connection Failed", err);
+    }
+  } else if (process.env.ENVIRONMENT === "STG") {
+    try {
+      await mongoose.connect(process.env.MONGODB_URI, {
+        authSource: "admin",
+        user: process.env.MONGODB_USER_NAME,
+        pass: process.env.MONGODB_USER_PASSWORD,
+      });
+
+      console.log("MongoDB Connected");
+    } catch (err) {
+      console.log("MongoDB Connection Failed", err);
+      // TODO: Setup Webhook to alert connection failure
+    }
+  } else if (process.env.ENVIRONMENT === "PROD") {
+    try {
+      // Create multi-hop SSH tunnel
+      await createMultiHopTunnel();
+
+      // Connect to MongoDB through the tunnel
+      await mongoose.connect(process.env.MONGODB_URI, {
+        authSource: "admin",
+        user: process.env.MONGODB_USER_NAME,
+        pass: process.env.MONGODB_USER_PASSWORD,
+      });
+
+      console.log("MongoDB Connected");
+    } catch (err) {
+      console.log("MongoDB Connection Failed", err);
+      // TODO: Setup Webhook to alert connection failure
+    }
+  } else if (process.env.ENVIRONMENT === "PROD_LOCAL") {
+    try {
+      // Connect directly to local MongoDB container (no SSH tunnel)
+      await mongoose.connect(process.env.MONGODB_URI, {
+        authSource: "admin",
+        user: process.env.MONGODB_USER_NAME,
+        pass: process.env.MONGODB_USER_PASSWORD,
+      });
+
+      console.log("MongoDB Connected (PROD_LOCAL)");
+    } catch (err) {
+      console.log("MongoDB Connection Failed", err);
+    }
+  } else {
+    throw new Error("Unknown Environment");
+  }
+};

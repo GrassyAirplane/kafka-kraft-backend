@@ -1,0 +1,221 @@
+{
+  "format-version" : 2,
+  "table-uuid" : "e904020e-13f5-48e6-95a0-791799da41fe",
+  "location" : "/opt/warehouse/iceberg/default/crypto_prices",
+  "last-sequence-number" : 6,
+  "last-updated-ms" : 1770207760476,
+  "last-column-id" : 2,
+  "current-schema-id" : 0,
+  "schemas" : [ {
+    "type" : "struct",
+    "schema-id" : 0,
+    "fields" : [ {
+      "id" : 1,
+      "name" : "timestamp",
+      "required" : false,
+      "type" : "string"
+    }, {
+      "id" : 2,
+      "name" : "usd_price",
+      "required" : false,
+      "type" : "double"
+    } ]
+  } ],
+  "default-spec-id" : 0,
+  "partition-specs" : [ {
+    "spec-id" : 0,
+    "fields" : [ ]
+  } ],
+  "last-partition-id" : 999,
+  "default-sort-order-id" : 0,
+  "sort-orders" : [ {
+    "order-id" : 0,
+    "fields" : [ ]
+  } ],
+  "properties" : {
+    "owner" : "root",
+    "write.parquet.compression-codec" : "zstd"
+  },
+  "current-snapshot-id" : 6399472198156984501,
+  "refs" : {
+    "main" : {
+      "snapshot-id" : 6399472198156984501,
+      "type" : "branch"
+    }
+  },
+  "snapshots" : [ {
+    "sequence-number" : 1,
+    "snapshot-id" : 2787703662303978068,
+    "timestamp-ms" : 1770207506968,
+    "summary" : {
+      "operation" : "append",
+      "spark.app.id" : "local-1770207498656",
+      "spark.sql.streaming.epochId" : "0",
+      "spark.sql.streaming.queryId" : "278567ad-bf81-45f1-a372-39ee289cdb84",
+      "changed-partition-count" : "0",
+      "total-records" : "0",
+      "total-files-size" : "0",
+      "total-data-files" : "0",
+      "total-delete-files" : "0",
+      "total-position-deletes" : "0",
+      "total-equality-deletes" : "0"
+    },
+    "manifest-list" : "/opt/warehouse/iceberg/default/crypto_prices/metadata/snap-2787703662303978068-1-6de53e0a-1aff-4b7e-9f6b-e223b838a879.avro",
+    "schema-id" : 0
+  }, {
+    "sequence-number" : 2,
+    "snapshot-id" : 195918892055781446,
+    "parent-snapshot-id" : 2787703662303978068,
+    "timestamp-ms" : 1770207694983,
+    "summary" : {
+      "operation" : "append",
+      "spark.app.id" : "local-1770207687350",
+      "spark.sql.streaming.epochId" : "1",
+      "spark.sql.streaming.queryId" : "278567ad-bf81-45f1-a372-39ee289cdb84",
+      "added-data-files" : "1",
+      "added-records" : "2",
+      "added-files-size" : "796",
+      "changed-partition-count" : "1",
+      "total-records" : "2",
+      "total-files-size" : "796",
+      "total-data-files" : "1",
+      "total-delete-files" : "0",
+      "total-position-deletes" : "0",
+      "total-equality-deletes" : "0"
+    },
+    "manifest-list" : "/opt/warehouse/iceberg/default/crypto_prices/metadata/snap-195918892055781446-1-5591586b-1bec-44c1-992d-fd0998f4fad9.avro",
+    "schema-id" : 0
+  }, {
+    "sequence-number" : 3,
+    "snapshot-id" : 4781941379295098156,
+    "parent-snapshot-id" : 195918892055781446,
+    "timestamp-ms" : 1770207699642,
+    "summary" : {
+      "operation" : "append",
+      "spark.app.id" : "local-1770207687350",
+      "spark.sql.streaming.epochId" : "2",
+      "spark.sql.streaming.queryId" : "278567ad-bf81-45f1-a372-39ee289cdb84",
+      "added-data-files" : "1",
+      "added-records" : "1",
+      "added-files-size" : "817",
+      "changed-partition-count" : "1",
+      "total-records" : "3",
+      "total-files-size" : "1613",
+      "total-data-files" : "2",
+      "total-delete-files" : "0",
+      "total-position-deletes" : "0",
+      "total-equality-deletes" : "0"
+    },
+    "manifest-list" : "/opt/warehouse/iceberg/default/crypto_prices/metadata/snap-4781941379295098156-1-4d78cb98-5182-43d8-a35b-f46ee3000145.avro",
+    "schema-id" : 0
+  }, {
+    "sequence-number" : 4,
+    "snapshot-id" : 2903675508568731558,
+    "parent-snapshot-id" : 4781941379295098156,
+    "timestamp-ms" : 1770207719934,
+    "summary" : {
+      "operation" : "append",
+      "spark.app.id" : "local-1770207687350",
+      "spark.sql.streaming.epochId" : "3",
+      "spark.sql.streaming.queryId" : "278567ad-bf81-45f1-a372-39ee289cdb84",
+      "added-data-files" : "1",
+      "added-records" : "1",
+      "added-files-size" : "817",
+      "changed-partition-count" : "1",
+      "total-records" : "4",
+      "total-files-size" : "2430",
+      "total-data-files" : "3",
+      "total-delete-files" : "0",
+      "total-position-deletes" : "0",
+      "total-equality-deletes" : "0"
+    },
+    "manifest-list" : "/opt/warehouse/iceberg/default/crypto_prices/metadata/snap-2903675508568731558-1-f4cd87bc-f495-4d42-bf00-014838d5b361.avro",
+    "schema-id" : 0
+  }, {
+    "sequence-number" : 5,
+    "snapshot-id" : 7670799257620789688,
+    "parent-snapshot-id" : 2903675508568731558,
+    "timestamp-ms" : 1770207740466,
+    "summary" : {
+      "operation" : "append",
+      "spark.app.id" : "local-1770207687350",
+      "spark.sql.streaming.epochId" : "4",
+      "spark.sql.streaming.queryId" : "278567ad-bf81-45f1-a372-39ee289cdb84",
+      "added-data-files" : "1",
+      "added-records" : "1",
+      "added-files-size" : "817",
+      "changed-partition-count" : "1",
+      "total-records" : "5",
+      "total-files-size" : "3247",
+      "total-data-files" : "4",
+      "total-delete-files" : "0",
+      "total-position-deletes" : "0",
+      "total-equality-deletes" : "0"
+    },
+    "manifest-list" : "/opt/warehouse/iceberg/default/crypto_prices/metadata/snap-7670799257620789688-1-f1763eef-1033-4618-bab2-2cc52faab55a.avro",
+    "schema-id" : 0
+  }, {
+    "sequence-number" : 6,
+    "snapshot-id" : 6399472198156984501,
+    "parent-snapshot-id" : 7670799257620789688,
+    "timestamp-ms" : 1770207760476,
+    "summary" : {
+      "operation" : "append",
+      "spark.app.id" : "local-1770207687350",
+      "spark.sql.streaming.epochId" : "5",
+      "spark.sql.streaming.queryId" : "278567ad-bf81-45f1-a372-39ee289cdb84",
+      "added-data-files" : "1",
+      "added-records" : "1",
+      "added-files-size" : "817",
+      "changed-partition-count" : "1",
+      "total-records" : "6",
+      "total-files-size" : "4064",
+      "total-data-files" : "5",
+      "total-delete-files" : "0",
+      "total-position-deletes" : "0",
+      "total-equality-deletes" : "0"
+    },
+    "manifest-list" : "/opt/warehouse/iceberg/default/crypto_prices/metadata/snap-6399472198156984501-1-0194e339-bcae-479c-b348-2770781fdb40.avro",
+    "schema-id" : 0
+  } ],
+  "statistics" : [ ],
+  "partition-statistics" : [ ],
+  "snapshot-log" : [ {
+    "timestamp-ms" : 1770207506968,
+    "snapshot-id" : 2787703662303978068
+  }, {
+    "timestamp-ms" : 1770207694983,
+    "snapshot-id" : 195918892055781446
+  }, {
+    "timestamp-ms" : 1770207699642,
+    "snapshot-id" : 4781941379295098156
+  }, {
+    "timestamp-ms" : 1770207719934,
+    "snapshot-id" : 2903675508568731558
+  }, {
+    "timestamp-ms" : 1770207740466,
+    "snapshot-id" : 7670799257620789688
+  }, {
+    "timestamp-ms" : 1770207760476,
+    "snapshot-id" : 6399472198156984501
+  } ],
+  "metadata-log" : [ {
+    "timestamp-ms" : 1770207502156,
+    "metadata-file" : "/opt/warehouse/iceberg/default/crypto_prices/metadata/v1.metadata.json"
+  }, {
+    "timestamp-ms" : 1770207506968,
+    "metadata-file" : "/opt/warehouse/iceberg/default/crypto_prices/metadata/v2.metadata.json"
+  }, {
+    "timestamp-ms" : 1770207694983,
+    "metadata-file" : "/opt/warehouse/iceberg/default/crypto_prices/metadata/v3.metadata.json"
+  }, {
+    "timestamp-ms" : 1770207699642,
+    "metadata-file" : "/opt/warehouse/iceberg/default/crypto_prices/metadata/v4.metadata.json"
+  }, {
+    "timestamp-ms" : 1770207719934,
+    "metadata-file" : "/opt/warehouse/iceberg/default/crypto_prices/metadata/v5.metadata.json"
+  }, {
+    "timestamp-ms" : 1770207740466,
+    "metadata-file" : "/opt/warehouse/iceberg/default/crypto_prices/metadata/v6.metadata.json"
+  } ]
+}

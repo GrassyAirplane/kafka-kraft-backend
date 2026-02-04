@@ -1,0 +1,51 @@
+services:
+  database:
+    image: "mongo:8.0.17-noble"
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - "./mongo_data:/data/db"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpassword
+    networks:
+      - app-network
+
+  frontend:
+    restart: always
+    ports:
+      - "3000:3000"
+    build: 
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    environment:
+      - DOCKER_ENV=true
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    restart: always
+    ports:
+      - "5000:5000"
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    command: npm run start-prod
+    environment:
+      # Use local MongoDB container instead of remote
+      - MONGODB_URI=mongodb://database:27017/main
+      - MONGODB_USER_NAME=admin
+      - MONGODB_USER_PASSWORD=adminpassword
+      # Set to PROD_LOCAL to skip SSH tunnel and connect directly to local DB
+      - ENVIRONMENT=PROD_LOCAL
+    depends_on:
+      - database
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
